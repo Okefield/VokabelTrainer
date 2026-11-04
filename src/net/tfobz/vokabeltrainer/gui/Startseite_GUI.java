@@ -1,5 +1,10 @@
+package net.tfobz.vokabeltrainer.gui;
+
 import javax.swing.*;
 import java.awt.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 public class Startseite_GUI extends JFrame{
 	private JComboBox<String> sprache = null;
 	private JComboBox<String> fach = null;
@@ -37,10 +42,13 @@ public class Startseite_GUI extends JFrame{
 		add(einstellungen);
 		einstellungen.addActionListener(
 				new ActionListener() {
-					public void actionPerformed(actionEvent e) {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
 						
 					}
-				}
+				});
 	}
 	public static void main(String[] args) {
 		Startseite_GUI gui = new Startseite_GUI();
