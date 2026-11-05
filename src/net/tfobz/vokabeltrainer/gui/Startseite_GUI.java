@@ -1,4 +1,6 @@
 package net.tfobz.vokabeltrainer.gui;
+import net.tfobz.vokabeltrainer.model.Lernkartei;
+import net.tfobz.vokabeltrainer.model.VokabeltrainerDB;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,7 @@ public class Startseite_GUI extends JFrame {
 
     private JPanel startPanel;
     private JPanel einstellungenPanel;
+   
 
     private JComboBox<String> sprache;
     private JComboBox<String> fach;
@@ -72,6 +75,7 @@ public class Startseite_GUI extends JFrame {
         JLabel titel = new JLabel("Lernkartei verwalten");
         titel.setBounds(30, 15, 250, 25);
         einstellungenPanel.add(titel);
+        
         //Name der kartei:
         lblname = new JLabel("Name der Kartei");
         lblname.setBounds(30, 50, 150, 20);
@@ -81,9 +85,9 @@ public class Startseite_GUI extends JFrame {
         txtname.setBounds(30, 70, 340, 25);
         einstellungenPanel.add(txtname);
         
-        //Checkbox für Groß/kleinschreibung:
-        lblsprache1 = new JLabel("Sprache 1 (z.B Deutsch): ");
-        lblsprache2 = new JLabel("Sprache 2 (z.B Englisch):");
+        //Sprache 1 und 2
+        lblsprache1 = new JLabel("Sprache 1");
+        lblsprache2 = new JLabel("Sprache 2");
         txtsprache1 = new JTextField();
         txtsprache2 = new JTextField();
         lblsprache1.setBounds(30,105,160,20);
@@ -95,7 +99,7 @@ public class Startseite_GUI extends JFrame {
         einstellungenPanel.add(txtsprache1);
         einstellungenPanel.add(txtsprache2);
 
-
+        //Checkbox für Groß/kleinschreibung:
         schreibung = new JCheckBox("Groß-/Kleinschreibung beachten?");
         schreibung.setBounds(30,225,280,25);
         einstellungenPanel.add(schreibung);
@@ -123,6 +127,33 @@ public class Startseite_GUI extends JFrame {
         speichern.setBounds(30,280,110,35);
         speichern.setBackground(new Color(120,220,120));
         einstellungenPanel.add(speichern);
+        speichern.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+        			Lernkartei l = new Lernkartei();
+        			l.setGrossKleinschreibung(schreibung.isSelected());
+        			l.setBeschreibung(txtname.getText());
+        			l.setWortEinsBeschreibung(txtsprache1.getText());
+        			l.setWortZweiBeschreibung(txtsprache2.getText());
+        			l.setRichtung(wort_1.isSelected());
+        			
+        			//schaut ob alles passt
+        			l.validiere();
+        			VokabeltrainerDB.hinzufuegenLernkartei(l);
+        			JOptionPane.showMessageDialog(Startseite_GUI.this, "Erfolgreich gespeichert"); 			
+        		}catch(Exception ex) {
+        			JOptionPane.showMessageDialog(Startseite_GUI.this, ex.getMessage(), "EingabeFehler", JOptionPane.WARNING_MESSAGE);
+        			
+        		}
+
+			}
+        		
+        }
+        );
+        	
+        
         
         // Zwischen Panels wechseln
         einstellungen.addActionListener(new ActionListener() {
@@ -141,7 +172,10 @@ public class Startseite_GUI extends JFrame {
 
         // Startseite anzeigen
         zeigePanel(startPanel);
+        
+        
     }
+    
 
     private void zeigePanel(JPanel panel) {
         setContentPane(panel);
@@ -154,5 +188,6 @@ public class Startseite_GUI extends JFrame {
     public static void main(String[] args) {
         Startseite_GUI gui = new Startseite_GUI();
         gui.setVisible(true);
+ 
     }
 }
