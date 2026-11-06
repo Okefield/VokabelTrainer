@@ -2,6 +2,8 @@ package net.tfobz.vokabeltrainer.gui;
 import net.tfobz.vokabeltrainer.model.Lernkartei;
 import net.tfobz.vokabeltrainer.model.VokabeltrainerDB;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +14,6 @@ public class Startseite_GUI extends JFrame {
     private JPanel einstellungenPanel;
    
 
-    private JComboBox<String> sprache;
-    private JComboBox<String> fach;
     private JCheckBox schreibung;
     private JRadioButton wort_1;
     private JRadioButton wort_2;
@@ -27,6 +27,12 @@ public class Startseite_GUI extends JFrame {
     private JLabel radiobuttons;
     private JButton zurueck;
     private JButton speichern;
+    private JButton loeschen;
+    //table
+    private JTable t1;
+    private DefaultTableModel tableModel;
+    private java.util.List<Lernkartei> angezeigteKarteien = new java.util.ArrayList<>();
+    private JCheckBox faellige;
 
     public Startseite_GUI() {
         setTitle("Vokabeltrainer");
@@ -35,36 +41,73 @@ public class Startseite_GUI extends JFrame {
         // Startseite erstellen
         startPanel = new JPanel();
         startPanel.setLayout(null);
-        startPanel.setPreferredSize(new Dimension(400, 250));
+        startPanel.setPreferredSize(new Dimension(520, 350));
 
-        JLabel text = new JLabel(
-            "Wählen Sie folgende Optionen aus um zu lernen!"
-        );
-        text.setBounds(50, 10, 320, 20);
+        JLabel text = new JLabel("Ihre Lernkarteien");
+        text.setBounds(30, 15, 200, 25);
         startPanel.add(text);
-
-        fach = new JComboBox<String>();
-        fach.addItem("1 Fach");
-        fach.addItem("2 Fach");
-        fach.addItem("3 Fach");
-        fach.addItem("4 Fach");
-        fach.setBounds(50, 50, 100, 30);
-        startPanel.add(fach);
+        //Checkbox ob nur fällige angezeigt werden:
+        faellige = new JCheckBox("Nur fällige anzeigen");
+        faellige.setBounds(300,15,190,25);
+        startPanel.add(faellige);
         
-        sprache = new JComboBox<String>();
-        sprache.setBounds(50, 100, 100, 30);
-        startPanel.add(sprache);
-
+        //lern Button
         JButton lern = new JButton("Lern");
-        lern.setBounds(50, 150, 80, 40);
-        lern.setBackground(Color.GREEN);
+        lern.setBounds(30, 280, 110, 35);
+        lern.setBackground(new Color(120, 220, 120));
         startPanel.add(lern);
+        
+        //scrollpane
+        JButton neu = new JButton("Neu");
+        neu.setBounds(300, 50, 50, 50);
+        neu.setBounds(340, 280, 150, 35);
+        startPanel.add(neu);
+        
+        //löschen Button
+        loeschen = new JButton("Löschen");
+        loeschen.setBounds(150, 280, 100, 35);
+        startPanel.add(loeschen);
+        //Actionlistener für alle
+        
+        loeschen.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e) {
+        		Lernkartei gewaehlt = getAusgewaehlteKartei();
+        		if(gewaehlt != null) {
+        			int antwort = JOptionPane.showConfirmDialog(Startseite_GUI.this, "Möchten Sie die Kartei "+ gewaehlt.getBeschreibung() + " wirklich löschen?","Löschen Bestätigen", JOptionPane.YES_NO_OPTION);
+        			if(antwort == JOptionPane.YES_OPTION) {
+        				VokabeltrainerDB.loeschenLernkartei(gewaehlt.getNummer());
+        				tabelleAktualisieren();
+        
+        			}
+        		} else {
+        			JOptionPane.showMessageDialog(Startseite_GUI.this, "Bitte markieren Sie zuerst eine Kartei in der Tabelle");
+        			
+        		}
+        		
+        	}
+        	
+        }
+        );
+        faellige.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tabelleAktualisieren();
+        	}
+        }
+        );
+        
 
-        JButton einstellungen = new JButton("⚙");
-        einstellungen.setBounds(300, 50, 50, 50);
-        einstellungen.setBackground(Color.LIGHT_GRAY);
-        startPanel.add(einstellungen);
-
+        
+        
+        
+        //JTable
+        String [] spalten = {"ID", "Name der Kartei", "Sprache1", "Sprache2"};
+        tableModel = new DefaultTableModel(spalten,0);
+        t1 = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(t1);
+        scrollPane.setBounds(30, 50, 460, 210);
+        scrollPane.setBounds(30, 45, 420, 180); 
+        startPanel.add(scrollPane);
+        
         // Einstellungen-Panel erstellen
         einstellungenPanel = new JPanel();
         einstellungenPanel.setLayout(null);
@@ -118,6 +161,7 @@ public class Startseite_GUI extends JFrame {
         
         einstellungenPanel.add(wort_1);
         einstellungenPanel.add(wort_2);
+        
         //Zurück Button und Speichern Button
        
         JButton zurueck = new JButton("Zurück");
@@ -139,10 +183,29 @@ public class Startseite_GUI extends JFrame {
         			l.setWortZweiBeschreibung(txtsprache2.getText());
         			l.setRichtung(wort_1.isSelected());
         			
-        			//schaut ob alles passt
+        			//scyhaut ob alles passt
         			l.validiere();
-        			VokabeltrainerDB.hinzufuegenLernkartei(l);
-        			JOptionPane.showMessageDialog(Startseite_GUI.this, "Erfolgreich gespeichert"); 			
+        			int ergebnis = VokabeltrainerDB.hinzufuegenLernkartei(l);
+
+                    if (ergebnis >= 0) {
+                        JOptionPane.showMessageDialog(Startseite_GUI.this, "Erfolgreich gespeichert!");
+                        
+                        // Textfelder leeren
+                        txtname.setText("");
+                        txtsprache1.setText("");
+                        txtsprache2.setText("");
+                        
+                        // Tabelle aktualisieren und zurück zur Startseite
+                        tabelleAktualisieren();
+                        zeigePanel(startPanel);
+                    } else {
+                        JOptionPane.showMessageDialog(
+                            Startseite_GUI.this, 
+                            "Fehler: Eine Kartei mit diesem Namen existiert bereits!", 
+                            "Fehler", 
+                            JOptionPane.ERROR_MESSAGE
+                        );
+                    } 			
         		}catch(Exception ex) {
         			JOptionPane.showMessageDialog(Startseite_GUI.this, ex.getMessage(), "EingabeFehler", JOptionPane.WARNING_MESSAGE);
         			
@@ -156,7 +219,7 @@ public class Startseite_GUI extends JFrame {
         
         
         // Zwischen Panels wechseln
-        einstellungen.addActionListener(new ActionListener() {
+        neu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 zeigePanel(einstellungenPanel);
@@ -166,20 +229,56 @@ public class Startseite_GUI extends JFrame {
         zurueck.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	txtname.setText("");
+            	txtsprache1.setText("");
+            	txtsprache2.setText("");
+            	wort_1.setSelected(true);
+            	schreibung.setSelected(false);
+            	
+            	
+            	tabelleAktualisieren();
                 zeigePanel(startPanel);
             }
         });
-
+        tabelleAktualisieren();
         // Startseite anzeigen
         zeigePanel(startPanel);
         
         
     }
+    public void tabelleAktualisieren() {
+        tableModel.setRowCount(0);
+        if (faellige.isSelected()) {
+            angezeigteKarteien = VokabeltrainerDB.getLernkarteienErinnerung();
+        } else {
+            angezeigteKarteien = VokabeltrainerDB.getLernkarteien();
+        }
+        
+        if (angezeigteKarteien != null) {
+            for (Lernkartei k : angezeigteKarteien) {
+                tableModel.addRow(new Object[]{
+                    k.getNummer(),
+                    k.getBeschreibung(),
+                    k.getWortEinsBeschreibung(),
+                    k.getWortZweiBeschreibung()
+                });
+            }
+        }
+    }
+    public Lernkartei getAusgewaehlteKartei() {
+        int zeile = t1.getSelectedRow(); 
+        
+
+        if (zeile >= 0 && zeile < angezeigteKarteien.size()) {
+            return angezeigteKarteien.get(zeile);
+        }
+        return null; 
+    }
     
 
     private void zeigePanel(JPanel panel) {
         setContentPane(panel);
-        pack(); // JFrame passt sich an die Panel-Größe an
+        pack(); 
 
         setLocationRelativeTo(null);
         setLocation(getX(), 0);
