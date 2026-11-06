@@ -48,31 +48,37 @@ public class LernSession {
 	    }
 
 	    return istRichtig;
-	}
+		
+		
+	}	
 	
 	
 	 public Karte getAktuelleKarte() {
-	        return aktuelleKarte;
-	    }
+		 return aktuelleKarte;
+	 }
 
-	    public int getRichtigCount() {
-	        return richtigCount;
-	    }
+	 public int getRichtigCount() {
+		 return richtigCount;
+	 }
 
-	    public int getFalschCount() {
-	        return falschCount;
-	    }
+	 public int getFalschCount() {
+		 return falschCount;
+	 }
 
-	    public int getAktuellesFach() {
-	        return aktuellesFach;
-	    }
+	 public int getAktuellesFach() {
+		 return aktuellesFach;
+	 }
 
-	    public void setAktuellesFach(int fach) {
-	        this.aktuellesFach = fach;
+	 public void setAktuellesFach(int fach) {
+		 this.aktuellesFach = fach;
 	        
-	        this.richtigCount = 0;
-	        this.falschCount = 0;
-	    }
+		 this.richtigCount = 0;
+		 this.falschCount = 0;
+	 }
+	    
+	 public Lernkartei getLernkartei() {
+		 return lernkartei;
+	 }
 	
 	
 
