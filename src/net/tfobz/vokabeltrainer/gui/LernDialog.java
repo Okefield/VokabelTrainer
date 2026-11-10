@@ -2,6 +2,7 @@ package net.tfobz.vokabeltrainer.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,13 +50,10 @@ public class LernDialog extends JPanel {
     	
         this.parent = parent;
         this.session = new LernSession(gewaehlt);
-
-        initUI(gewaehlt);
-
         
         ladeNaechsteKarte();
-
-        setSize(560, 480);
+        
+        setPreferredSize(new Dimension(560, 480));
         
     }
 
@@ -162,6 +160,7 @@ public class LernDialog extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				parent.zeigePanel(parent.getStartPanel());
+				repaint();
 				
 			}
         });
@@ -226,6 +225,17 @@ public class LernDialog extends JPanel {
         } else {
             ladeNaechsteKarte();
         }
+    }
+    
+    public void starteLernenFuerFach(int fach) {
+        
+        session.setAktuellesFach(fach);
+
+        
+        initUI(session.getLernkartei());
+        ladeNaechsteKarte();
+        revalidate();
+        repaint();
     }
 
     private void ladeNaechsteKarte() {
