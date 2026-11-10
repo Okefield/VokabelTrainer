@@ -308,6 +308,10 @@ public class Startseite_GUI extends JFrame {
     public Object getStartPanel() {
     	return startPanel;
     }
+    
+    public JPanel getStartPanel() {
+    	return startPanel;
+    }
 
     public static void main(String[] args) {
         Startseite_GUI gui = new Startseite_GUI();
