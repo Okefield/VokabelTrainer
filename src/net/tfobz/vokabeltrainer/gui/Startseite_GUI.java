@@ -179,13 +179,15 @@ public class Startseite_GUI extends JFrame {
     }
     
 
-    private void zeigePanel(JPanel panel) {
+    public void zeigePanel(JPanel panel) {
         setContentPane(panel);
         pack(); // JFrame passt sich an die Panel-Größe an
 
         setLocationRelativeTo(null);
         setLocation(getX(), 0);
     }
+    
+    
 
     public static void main(String[] args) {
         Startseite_GUI gui = new Startseite_GUI();

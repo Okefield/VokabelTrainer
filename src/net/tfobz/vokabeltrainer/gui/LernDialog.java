@@ -6,15 +6,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import javax.swing.border.*;
 
 import net.tfobz.vokabeltrainer.logik.LernSession; 
 import net.tfobz.vokabeltrainer.model.Karte;
 import net.tfobz.vokabeltrainer.model.Lernkartei;
 
-public class LernDialog extends JDialog {
+public class LernDialog extends JPanel {
 
     
     private static final Color BG_WINDOW        = new Color(243, 244, 246);
@@ -26,7 +24,7 @@ public class LernDialog extends JDialog {
     private static final Color COLOR_SUCCESS    = new Color(22, 163, 74);   
     private static final Color COLOR_ERROR      = new Color(220, 38, 38);  
 
-    private final JFrame parent;
+    private final Startseite_GUI parent;
     private final LernSession session;
 
     
@@ -47,8 +45,7 @@ public class LernDialog extends JDialog {
 
     private boolean antwortGeprueft = false;
 
-    public LernDialog(JFrame parent, Lernkartei gewaehlt) {
-        super(parent, "Lerneinheit: " + (gewaehlt != null ? gewaehlt.getBeschreibung() : "Vokabeln"), true);
+    public LernDialog(Startseite_GUI parent, Lernkartei gewaehlt) {
         this.parent = parent;
         this.session = new LernSession(gewaehlt);
 
@@ -58,28 +55,25 @@ public class LernDialog extends JDialog {
         ladeNaechsteKarte();
 
         setSize(560, 480);
-        setResizable(false);
-        setLocationRelativeTo(parent);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     private void initUI(Lernkartei gewaehlt) {
         
-        getContentPane().setLayout(null);
-        getContentPane().setBackground(BG_WINDOW);
+        setLayout(null);
+        setBackground(BG_WINDOW);
 
        
         lblKarteiTitel = new JLabel(gewaehlt != null ? gewaehlt.getBeschreibung() : "Vokabeltrainer");
         lblKarteiTitel.setFont(new Font("Segoe UI", Font.BOLD, 17));
         lblKarteiTitel.setForeground(COLOR_TEXT_MAIN);
         lblKarteiTitel.setBounds(30, 15, 300, 25);
-        getContentPane().add(lblKarteiTitel);
+        add(lblKarteiTitel);
 
         lblStatistik = new JLabel("Richtig: 0 | Falsch: 0", SwingConstants.RIGHT);
         lblStatistik.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblStatistik.setForeground(COLOR_TEXT_MUTED);
         lblStatistik.setBounds(330, 17, 185, 20);
-        getContentPane().add(lblStatistik);
+        add(lblStatistik);
 
        
         rbRichtungEinsZwei = new JRadioButton("Wort 1 → Wort 2", true);
@@ -113,9 +107,9 @@ public class LernDialog extends JDialog {
         rbRichtungEinsZwei.addActionListener(wechselListener);
         rbRichtungZweiEins.addActionListener(wechselListener);
 
-        getContentPane().add(rbRichtungEinsZwei);
-        getContentPane().add(rbRichtungZweiEins);
-        getContentPane().add(cbGrossKlein);
+        add(rbRichtungEinsZwei);
+        add(rbRichtungZweiEins);
+        add(cbGrossKlein);
 
        
         pnlKarte = new JPanel();
@@ -152,7 +146,7 @@ public class LernDialog extends JDialog {
         lblFeedback.setBounds(15, 185, 455, 35);
         pnlKarte.add(lblFeedback);
 
-        getContentPane().add(pnlKarte);
+        add(pnlKarte);
 
         
         btnAbbrechen = new JButton("Abbrechen");
@@ -165,11 +159,11 @@ public class LernDialog extends JDialog {
            
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				parent.zeigePanel(parent.getStartPanel);
 				
 			}
         });
-        getContentPane().add(btnAbbrechen);
+        add(btnAbbrechen);
 
         btnAktion = new JButton("Prüfen");
         btnAktion.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -178,7 +172,7 @@ public class LernDialog extends JDialog {
         btnAktion.setForeground(Color.WHITE);
         btnAktion.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAktion.setBounds(380, 360, 135, 38);
-        getContentPane().add(btnAktion);
+        add(btnAktion);
 
        
         ActionListener aktionsEvent =new ActionListener() {
@@ -236,7 +230,7 @@ public class LernDialog extends JDialog {
         Karte karte = session.naechsteKarte();
 
         if (karte == null) {
-            dispose();
+            
             LernErgebnisDialog ergebnisDialog = new LernErgebnisDialog(parent, session);
             ergebnisDialog.setVisible(true);
             return;

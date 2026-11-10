@@ -3,6 +3,9 @@ package net.tfobz.vokabeltrainer.gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -86,7 +89,14 @@ public class LernErgebnisDialog extends JDialog {
         btnStartseite.setForeground(COLOR_TEXT_MAIN);
         btnStartseite.setFocusPainted(false);
         btnStartseite.setBounds(25, 205, 195, 38);
-        btnStartseite.addActionListener(e -> dispose());
+        btnStartseite.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+			}
+		});
         getContentPane().add(btnStartseite);
 
         JButton btnNaechstesFach = new JButton("Nächstes Fach lernen →");
@@ -102,13 +112,18 @@ public class LernErgebnisDialog extends JDialog {
             btnNaechstesFach.setEnabled(false);
             btnNaechstesFach.setText("Höchstes Fach erreicht");
         } else {
-            btnNaechstesFach.addActionListener(e -> {
-                dispose();
-                
-                session.setAktuellesFach(session.getAktuellesFach() + 1);
-                LernDialog naechsterDialog = new LernDialog(parent, session.getLernkartei());
-                naechsterDialog.setVisible(true);
-            });
+            btnNaechstesFach.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+	                
+	                session.setAktuellesFach(session.getAktuellesFach() + 1);
+	                LernDialog naechsterDialog = new LernDialog(parent, session.getLernkartei());
+	                naechsterDialog.setVisible(true);
+					
+				}
+			});
         }
         getContentPane().add(btnNaechstesFach);
     }
