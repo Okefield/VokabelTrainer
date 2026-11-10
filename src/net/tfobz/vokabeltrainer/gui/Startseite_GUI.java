@@ -37,6 +37,8 @@ public class Startseite_GUI extends JFrame {
     public Startseite_GUI() {
         setTitle("Vokabeltrainer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setLocationRelativeTo(null);
 
         // Startseite erstellen
         startPanel = new JPanel();
