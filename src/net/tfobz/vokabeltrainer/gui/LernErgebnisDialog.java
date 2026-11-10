@@ -3,12 +3,15 @@ package net.tfobz.vokabeltrainer.gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import net.tfobz.vokabeltrainer.logik.LernSession; 
 
-public class LernErgebnisDialog extends JDialog {
+public class LernErgebnisDialog extends JPanel {
 
     
     private static final Color BG_WINDOW        = new Color(243, 244, 246);
@@ -19,25 +22,23 @@ public class LernErgebnisDialog extends JDialog {
     private static final Color COLOR_TEXT_MAIN  = new Color(17, 24, 39);
     private static final Color COLOR_TEXT_MUTED = new Color(107, 114, 128);
 
-    private final JFrame parent;
+    private final Startseite_GUI parent;
     private final LernSession session;
 
-    public LernErgebnisDialog(JFrame parent, LernSession session) {
-        super(parent, "Lerneinheit abgeschlossen", true);
-        this.parent = parent;
+    public LernErgebnisDialog(Startseite_GUI parent, LernSession session) {
+        
         this.session = session;
+        this.parent = parent;
 
         initUI();
 
         setSize(480, 310);
-        setResizable(false);
-        setLocationRelativeTo(parent);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
     }
 
     private void initUI() {
-        getContentPane().setLayout(null);
-        getContentPane().setBackground(BG_WINDOW);
+        setLayout(null);
+        setBackground(BG_WINDOW);
 
        
         JPanel pnlCard = new JPanel();
@@ -77,7 +78,7 @@ public class LernErgebnisDialog extends JDialog {
         lblSpruch.setBounds(10, 115, 395, 25);
         pnlCard.add(lblSpruch);
 
-        getContentPane().add(pnlCard);
+        add(pnlCard);
 
       
         JButton btnStartseite = new JButton("Zurück zur Startseite");
@@ -86,8 +87,15 @@ public class LernErgebnisDialog extends JDialog {
         btnStartseite.setForeground(COLOR_TEXT_MAIN);
         btnStartseite.setFocusPainted(false);
         btnStartseite.setBounds(25, 205, 195, 38);
-        btnStartseite.addActionListener(e -> dispose());
-        getContentPane().add(btnStartseite);
+        btnStartseite.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.zeigePanel(parent.getStartPanel());
+				
+			}
+		});
+        add(btnStartseite);
 
         JButton btnNaechstesFach = new JButton("Nächstes Fach lernen →");
         btnNaechstesFach.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -103,13 +111,13 @@ public class LernErgebnisDialog extends JDialog {
             btnNaechstesFach.setText("Höchstes Fach erreicht");
         } else {
             btnNaechstesFach.addActionListener(e -> {
-                dispose();
-                
+              
                 session.setAktuellesFach(session.getAktuellesFach() + 1);
                 LernDialog naechsterDialog = new LernDialog(parent, session.getLernkartei());
-                naechsterDialog.setVisible(true);
+                parent.zeigePanel(naechsterDialog);
+                
             });
         }
-        getContentPane().add(btnNaechstesFach);
+        add(btnNaechstesFach);
     }
 }

@@ -278,12 +278,16 @@ public class Startseite_GUI extends JFrame {
     }
     
 
-    private void zeigePanel(JPanel panel) {
+    public void zeigePanel(JPanel panel) {
         setContentPane(panel);
         pack(); 
 
         setLocationRelativeTo(null);
         setLocation(getX(), 0);
+    }
+    
+    public JPanel getStartPanel() {
+    	return startPanel;
     }
 
     public static void main(String[] args) {
