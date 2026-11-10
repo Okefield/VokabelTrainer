@@ -101,8 +101,9 @@ public class Startseite_GUI extends JFrame {
         		Lernkartei gewaehlt = getAusgewaehlteKartei();
         		
         		if(gewaehlt != null) {
-        			LernDialog dialog = new LernDialog(Startseite_GUI.this,gewaehlt);
-        			zeigePanel(dialog);
+        			LernDialog dialog = new LernDialog(Startseite_GUI.this, gewaehlt);
+        			FachAuswahlPanel fachAuswahl =new FachAuswahlPanel(dialog, gewaehlt, Startseite_GUI.this);
+        			zeigePanel(fachAuswahl);
         			tabelleAktualisieren();
         			
         		}else {
@@ -303,8 +304,6 @@ public class Startseite_GUI extends JFrame {
         setContentPane(panel);
         pack(); 
 
-        setLocationRelativeTo(null);
-        setLocation(getX(), 0);
     }
     
     JPanel getStartPanel() {
