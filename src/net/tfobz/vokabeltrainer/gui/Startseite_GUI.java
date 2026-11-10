@@ -61,7 +61,6 @@ public class Startseite_GUI extends JFrame {
         
         //scrollpane
         JButton neu = new JButton("Neu");
-        neu.setBounds(300, 50, 50, 50);
         neu.setBounds(340, 280, 150, 35);
         startPanel.add(neu);
         
@@ -97,16 +96,37 @@ public class Startseite_GUI extends JFrame {
         }
         );
         
+        lern.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Lernkartei gewaehlt = getAusgewaehlteKartei();
+        		
+        		if(gewaehlt != null) {
+        			LernDialog dialog = new LernDialog(Startseite_GUI.this,gewaehlt);
+        			dialog.setVisible(true);
+        			tabelleAktualisieren();
+        			
+        		}else {
+        			JOptionPane.showMessageDialog(Startseite_GUI.this, "Bitte zuerst Lernkartei auswählen!");
+        		}
+        		
+        		
+        	}
+        });
+        
 
         
         
         
         //JTable
         String [] spalten = {"ID", "Name der Kartei", "Sprache1", "Sprache2"};
-        tableModel = new DefaultTableModel(spalten,0);
+        tableModel = new DefaultTableModel(spalten,0) {
+	        @Override
+	        public boolean isCellEditable(int row, int column) {
+	        	return false;
+	        }
+        };
         t1 = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(t1);
-        scrollPane.setBounds(30, 50, 460, 210);
         scrollPane.setBounds(30, 45, 420, 180); 
         startPanel.add(scrollPane);
         
@@ -137,7 +157,7 @@ public class Startseite_GUI extends JFrame {
         txtsprache2 = new JTextField();
         lblsprache1.setBounds(30,105,160,20);
         lblsprache2.setBounds(210, 105, 160, 20);
-        txtsprache1.setBounds(30,125,160,25);
+        txtsprache1.setBounds(30,125,160,20);
         txtsprache2.setBounds(210, 125, 160, 20);
         einstellungenPanel.add(lblsprache1);
         einstellungenPanel.add(lblsprache2);
@@ -278,12 +298,15 @@ public class Startseite_GUI extends JFrame {
     }
     
 
-    private void zeigePanel(JPanel panel) {
+    public void zeigePanel(JPanel panel) {
         setContentPane(panel);
         pack(); 
 
         setLocationRelativeTo(null);
-        setLocation(getX(), 0);
+    }
+    
+    public Object getStartPanel() {
+    	return startPanel;
     }
 
     public static void main(String[] args) {
