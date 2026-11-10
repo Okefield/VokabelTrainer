@@ -2,8 +2,8 @@ package net.tfobz.vokabeltrainer.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -102,7 +102,14 @@ public class LernDialog extends JDialog {
         cbGrossKlein.setBounds(315, 45, 200, 25);
 
        
-        ActionListener wechselListener = e -> aktualisiereFrageLabel();
+        ActionListener wechselListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				aktualisiereFrageLabel();
+				
+			}
+		};
         rbRichtungEinsZwei.addActionListener(wechselListener);
         rbRichtungZweiEins.addActionListener(wechselListener);
 
@@ -154,7 +161,14 @@ public class LernDialog extends JDialog {
         btnAbbrechen.setBackground(Color.WHITE);
         btnAbbrechen.setForeground(COLOR_TEXT_MAIN);
         btnAbbrechen.setBounds(245, 360, 120, 38);
-        btnAbbrechen.addActionListener(e -> dispose());
+        btnAbbrechen.addActionListener(new ActionListener() {
+           
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+			}
+        });
         getContentPane().add(btnAbbrechen);
 
         btnAktion = new JButton("Prüfen");
@@ -167,7 +181,15 @@ public class LernDialog extends JDialog {
         getContentPane().add(btnAktion);
 
        
-        ActionListener aktionsEvent = e -> verarbeiteEingabe();
+        ActionListener aktionsEvent =new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				verarbeiteEingabe();
+				
+			}
+		};
+        
         btnAktion.addActionListener(aktionsEvent);
         txtAntwort.addActionListener(aktionsEvent); 
     }
