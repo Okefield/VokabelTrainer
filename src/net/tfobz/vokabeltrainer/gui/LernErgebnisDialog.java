@@ -2,6 +2,7 @@ package net.tfobz.vokabeltrainer.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,14 +27,11 @@ public class LernErgebnisDialog extends JPanel {
     private final LernSession session;
 
     public LernErgebnisDialog(Startseite_GUI parent, LernSession session) {
-        
         this.session = session;
         this.parent = parent;
 
+        setPreferredSize(new Dimension(480, 310));   // statt setSize
         initUI();
-
-        setSize(480, 310);
-        
     }
 
     private void initUI() {
@@ -111,11 +109,9 @@ public class LernErgebnisDialog extends JPanel {
             btnNaechstesFach.setText("Höchstes Fach erreicht");
         } else {
             btnNaechstesFach.addActionListener(e -> {
-              
-                session.setAktuellesFach(session.getAktuellesFach() + 1);
+                int naechstes = session.getAktuellesFach() + 1;
                 LernDialog naechsterDialog = new LernDialog(parent, session.getLernkartei());
-                parent.zeigePanel(naechsterDialog);
-                
+                naechsterDialog.starteLernenFuerFach(naechstes);
             });
         }
         add(btnNaechstesFach);

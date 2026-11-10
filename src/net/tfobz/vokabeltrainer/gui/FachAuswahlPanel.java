@@ -2,6 +2,7 @@ package net.tfobz.vokabeltrainer.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,11 +40,10 @@ public class FachAuswahlPanel extends JPanel {
     }
 
     private void initUI() {
-        
+    	setPreferredSize(new Dimension(545, 430));   // ← neu
         setLayout(null);
         setBackground(BG_WINDOW);
-
-       
+    
         JLabel lblTitel = new JLabel("Lernstufe auswählen");
         lblTitel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblTitel.setForeground(COLOR_TEXT_MAIN);

@@ -1,5 +1,4 @@
 package net.tfobz.vokabeltrainer.gui;
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -47,18 +46,12 @@ public class LernDialog extends JPanel {
     private boolean antwortGeprueft = false;
 
     public LernDialog(Startseite_GUI parent, Lernkartei gewaehlt) {
-    	
         this.parent = parent;
         this.session = new LernSession(gewaehlt);
-        
-        ladeNaechsteKarte();
-        
         setPreferredSize(new Dimension(560, 480));
-        
     }
 
     private void initUI(Lernkartei gewaehlt) {
-        
         setLayout(null);
         setBackground(BG_WINDOW);
 
@@ -228,23 +221,19 @@ public class LernDialog extends JPanel {
     }
     
     public void starteLernenFuerFach(int fach) {
-        
         session.setAktuellesFach(fach);
-
-        
+        removeAll();
         initUI(session.getLernkartei());
+        parent.zeigePanel(this);
         ladeNaechsteKarte();
-        revalidate();
-        repaint();
     }
-
     private void ladeNaechsteKarte() {
         Karte karte = session.naechsteKarte();
 
         if (karte == null) {
-            
             LernErgebnisDialog ergebnisDialog = new LernErgebnisDialog(parent, session);
             parent.zeigePanel(ergebnisDialog);
+            return;
         }
 
         aktualisiereFrageLabel();

@@ -301,9 +301,12 @@ public class Startseite_GUI extends JFrame {
     
 
     void zeigePanel(JPanel panel) {
+        panel.setPreferredSize(new Dimension(560, 480));  // überall gleich groß
         setContentPane(panel);
-        pack(); 
-
+        pack();
+        setLocationRelativeTo(null);                      // nach pack() zentrieren
+        revalidate();
+        repaint();
     }
     
     JPanel getStartPanel() {
