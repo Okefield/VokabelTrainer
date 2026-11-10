@@ -37,7 +37,7 @@ public class Startseite_GUI extends JFrame {
     public Startseite_GUI() {
         setTitle("Vokabeltrainer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        //setResizable(false);
         setLocationRelativeTo(null);
 
         // Startseite erstellen
@@ -66,6 +66,7 @@ public class Startseite_GUI extends JFrame {
         
         //löschen Button
         loeschen = new JButton("Löschen");
+        loeschen.setBackground(new Color(215,53,78));
         loeschen.setBounds(150, 280, 100, 35);
         startPanel.add(loeschen);
         //Actionlistener für alle
@@ -118,7 +119,13 @@ public class Startseite_GUI extends JFrame {
         
         //JTable
         String [] spalten = {"ID", "Name der Kartei", "Sprache1", "Sprache2"};
-        tableModel = new DefaultTableModel(spalten,0);
+        tableModel = new DefaultTableModel(spalten,0) {
+        	@Override
+        	public boolean isCellEditable(int row, int column) {
+                return false;
+        	}
+        };
+        
         t1 = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(t1);
         scrollPane.setBounds(30, 45, 420, 180); 
