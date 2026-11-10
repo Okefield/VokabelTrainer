@@ -59,7 +59,6 @@ public class Startseite_GUI extends JFrame {
         
         //scrollpane
         JButton neu = new JButton("Neu");
-        neu.setBounds(300, 50, 50, 50);
         neu.setBounds(340, 280, 150, 35);
         startPanel.add(neu);
         
@@ -120,7 +119,6 @@ public class Startseite_GUI extends JFrame {
         tableModel = new DefaultTableModel(spalten,0);
         t1 = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(t1);
-        scrollPane.setBounds(30, 50, 460, 210);
         scrollPane.setBounds(30, 45, 420, 180); 
         startPanel.add(scrollPane);
         
@@ -152,7 +150,7 @@ public class Startseite_GUI extends JFrame {
         lblsprache1.setBounds(30,105,160,20);
         lblsprache2.setBounds(210, 105, 160, 20);
         txtsprache1.setBounds(30,125,160,25);
-        txtsprache2.setBounds(210, 125, 160, 20);
+        txtsprache2.setBounds(210, 125, 160, 25);
         einstellungenPanel.add(lblsprache1);
         einstellungenPanel.add(lblsprache2);
         einstellungenPanel.add(txtsprache1);
